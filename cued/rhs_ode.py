@@ -46,6 +46,7 @@ def make_rhs_ode_2_band(sys, electric_field_in_path, electric_field_ortho, P):
     Nk2 = P.Nk2
     split_paths = P.split_paths
     split_order = P.split_order
+    rho0 = P.rho0
 
     if sys.system == 'ana':
 
@@ -191,8 +192,8 @@ def make_rhs_ode_2_band(sys, electric_field_in_path, electric_field_ortho, P):
 
                             x[i]   += 2 * v_k_kprime[dist_kx_idx, dist_ky_idx] * ( y[i+2] * rho[kprime_x_idx, kprime_y_idx, 0, 1] ).imag
 
-                            x[i+1] += 1j*v_k_kprime[dist_kx_idx, dist_ky_idx] * ( y[i+1] * (rho[kprime_x_idx, kprime_y_idx, 0, 0] - 1 - rho[kprime_x_idx, kprime_y_idx, 1, 1] ) \
-                                                                    - ( y[i] -1 - y[i+3] ) * rho[kprime_x_idx, kprime_y_idx, 0, 1] )
+                            x[i+1] += 1j*v_k_kprime[dist_kx_idx, dist_ky_idx] * ( y[i+1] * (rho[kprime_x_idx, kprime_y_idx, 0, 0] - rho0[kprime_x_idx, kprime_y_idx, 0, 0] - rho[kprime_x_idx, kprime_y_idx, 1, 1] + rho0[kprime_x_idx, kprime_y_idx, 1, 1] ) \
+                                                                    - ( y[i] - y[i+3] ) * rho[kprime_x_idx, kprime_y_idx, 0, 1] )
 
                             x[i+3] += - 2 * v_k_kprime[dist_kx_idx, dist_ky_idx] * ( y[i+2] * rho[kprime_x_idx, kprime_y_idx, 0, 1] ).imag
 
@@ -305,8 +306,8 @@ def make_rhs_ode_2_band(sys, electric_field_in_path, electric_field_ortho, P):
 
                             x[i]   += 2 * v_k_kprime[dist_kx_idx, dist_ky_idx] * ( y[i+2] * rho[kprime_x_idx, kprime_y_idx, 0, 1] ).imag
 
-                            x[i+1] += 1j*v_k_kprime[dist_kx_idx, dist_ky_idx] * ( y[i+1] * (rho[kprime_x_idx, kprime_y_idx, 0, 0] - 1 - rho[kprime_x_idx, kprime_y_idx, 1, 1] ) \
-                                                                    - ( y[i] -1 - y[i+3] ) * rho[kprime_x_idx, kprime_y_idx, 0, 1] )
+                            x[i+1] += 1j*v_k_kprime[dist_kx_idx, dist_ky_idx] * ( y[i+1] * (rho[kprime_x_idx, kprime_y_idx, 0, 0] - rho0[kprime_x_idx, kprime_y_idx, 0, 0] - rho[kprime_x_idx, kprime_y_idx, 1, 1] + rho0[kprime_x_idx, kprime_y_idx, 1, 1] ) \
+                                                                    - ( y[i] - y[i+3] ) * rho[kprime_x_idx, kprime_y_idx, 0, 1] )
 
                             x[i+3] += - 2 * v_k_kprime[dist_kx_idx, dist_ky_idx] * ( y[i+2] * rho[kprime_x_idx, kprime_y_idx, 0, 1] ).imag
 

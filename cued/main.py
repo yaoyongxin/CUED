@@ -171,20 +171,25 @@ def run_sbe(sys, P, Mpi):
 	T = TimeContainers(P)
 	W = FrequencyContainers()
 
-	# Make rhs of ode for 2band or nband solver; returns 0 for series expansion
+
 	sys.eigensystem_dipole_path(P.paths[0], P) # change structure, such that hfjit gets calculated first
-	rhs_ode, solver = make_rhs_ode(P, T, sys)
 
 	# create array of initial occupation
 	rho_0 = np.zeros((P.Nk1, P.Nk2, P.n, P.n), dtype=P.type_complex_np)
 
 	T.densmat_container_fock = np.zeros((P.Nk1, P.Nk2, P.n, P.n), dtype=P.type_complex_np)
+	P.rho0 = np.zeros((P.Nk1, P.Nk2, P.n, P.n), dtype=P.type_complex_np)
 
 	for Nk2_idx in range(P.Nk2):
 		path = P.paths[Nk2_idx]
 		buf_, rho_0[:, Nk2_idx, :, :] = initial_condition(P, sys.e_in_path)
 
 	T.densmat_container_fock = rho_0
+	P.rho0 = rho_0
+
+	# Make rhs of ode for 2band or nband solver; returns 0 for series expansion
+	rhs_ode, solver = make_rhs_ode(P, T, sys)
+
 
 	###########################################################################
 	# SOLVING
